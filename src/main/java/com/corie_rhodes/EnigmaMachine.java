@@ -38,6 +38,15 @@ public class EnigmaMachine {
         StringBuilder output = new StringBuilder();
         char tempChar;
         for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) == ' ') {
+                output.append(' ');
+                continue;
+            } else if (input.charAt(i) == '\n') {
+                output.append('\n');
+                continue;
+            } else if (!Character.isLetter(input.charAt(i))) {
+                continue;
+            }
             tempChar = this.getPlugboard().encrypt(input.charAt(i));
             tempChar = this.getRotor1().encrypt(tempChar);
             tempChar = this.getRotor2().encrypt(tempChar);
