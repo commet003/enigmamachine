@@ -38,15 +38,7 @@ public class EnigmaMachine {
         StringBuilder output = new StringBuilder();
         char tempChar;
         for (int i = 0; i < input.length(); i++) {
-            if (input.charAt(i) == ' ') {
-                output.append(' ');
-                continue;
-            } else if (input.charAt(i) == '\n') {
-                output.append('\n');
-                continue;
-            } else if (!Character.isLetter(input.charAt(i))) {
-                continue;
-            }
+            if (inputErrorCheck(input, output, i)) continue;
             tempChar = this.getPlugboard().encrypt(input.charAt(i));
             tempChar = this.getRotor1().encrypt(tempChar);
             tempChar = this.getRotor2().encrypt(tempChar);
@@ -55,6 +47,30 @@ public class EnigmaMachine {
         }
 
         return output.toString();
+    }
+
+    public String decrypt(String input) {
+        StringBuilder output = new StringBuilder();
+        char tempChar;
+        for (int i = 0; i < input.length(); i++) {
+            if (inputErrorCheck(input, output, i)) continue;
+            tempChar = this.getRotor3().decrypt(input.charAt(i));
+            tempChar = this.getRotor2().decrypt(tempChar);
+            tempChar = this.getRotor1().decrypt(tempChar);
+            output.append(this.getPlugboard().decrypt(tempChar));
+        }
+
+        return output.toString();
+    }
+
+    private boolean inputErrorCheck(String input, StringBuilder output, int i) {
+        if (input.charAt(i) == ' ') {
+            output.append(' ');
+            return true;
+        } else if (input.charAt(i) == '\n') {
+            output.append('\n');
+            return true;
+        } else return !Character.isLetter(input.charAt(i));
     }
 
     public Rotor getRotor1() {

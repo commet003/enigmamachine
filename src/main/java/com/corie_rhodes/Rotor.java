@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Rotor{
     private RotorPosition rotorPosition;
-    private Map<Character, Character> rotorMap;
+    private final Map<Character, Character> rotorMap;
 
 
 

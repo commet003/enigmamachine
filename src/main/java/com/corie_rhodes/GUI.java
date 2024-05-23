@@ -79,13 +79,21 @@ public class GUI {
         input = new JTextField();
         input.setPreferredSize(new Dimension(200, 50));
         input.addActionListener(_ -> {
-            String text = input.getText();
-            System.out.println("Input: " + text);
-            String outputString = "";
-            outputString = enigmaMachine.encrypt(text.toUpperCase());
-            output.setText("Encrypted Message: " + outputString);
-            System.out.println("Output: " + outputString);
-        }
+                String text = input.getText();
+                String outputString = "";
+
+                if (enigmaMachine.getMode().equals(EncryptDecrypt.ENCRYPT.toString())) {
+                    System.out.println("Input: " + text);
+                    outputString = enigmaMachine.encrypt(text.toUpperCase());
+                    output.setText("Encrypted Message: " + outputString);
+                    System.out.println("Output: " + outputString);
+                } else {
+                    System.out.println("Input: " + text);
+                    outputString = enigmaMachine.decrypt(text.toUpperCase());
+                    output.setText("Decrypted Message: " + outputString);
+                    System.out.println("Output: " + outputString);
+                }
+            }
         );
 
         plugboardPanel = new JPanel();
