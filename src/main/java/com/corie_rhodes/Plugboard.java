@@ -11,8 +11,9 @@ public class Plugboard {
     }
 
     public void addPlug(char c1, char c2) {
-        if (plugboardMap.containsKey(c1) || plugboardMap.containsKey(c2)) {
-            return;
+        if (plugboardMap.containsKey(c1)){
+            plugboardMap.remove(plugboardMap.get(c1));
+            plugboardMap.remove(c1);
         }
         plugboardMap.put(c1, c2);
         plugboardMap.put(c2, c1);

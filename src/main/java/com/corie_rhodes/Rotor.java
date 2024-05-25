@@ -7,8 +7,6 @@ public class Rotor{
     private RotorPosition rotorPosition;
     private final Map<Character, Character> rotorMap;
 
-
-
     public Rotor() {
         rotorPosition = RotorPosition.I;
         rotorMap = new HashMap<>();

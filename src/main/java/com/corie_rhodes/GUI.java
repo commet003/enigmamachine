@@ -2,6 +2,10 @@ package com.corie_rhodes;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Objects;
 
 public class GUI {
@@ -21,6 +25,7 @@ public class GUI {
 
     private final JLabel inputLabel;
     private final JTextField input;
+    private final JButton submitEncryptDecrypt;
     private final JLabel mapLetterFromLabel;
     private final JTextField mapLetterFrom;
     private final JLabel mapLetterToLabel;
@@ -31,6 +36,7 @@ public class GUI {
     private final int WIDTH = 800;
     private final int HEIGHT = 600;
 
+    private final String[] rotorPositions = {"I", "II", "III", "IV", "V"};
 
 
 
@@ -46,6 +52,15 @@ public class GUI {
         outputPanel = new JPanel();
         outputPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT / 4));
         output = new JLabel("Encrypted Message: ");
+        output.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                StringSelection stringSelection = new StringSelection(output.getText());
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(stringSelection, null);
+                System.out.println(output.getText() + " copied to clipboard");
+            }
+        });
 
         encryptDecryptBox = new JComboBox<>(new String[]{"Encrypt", "Decrypt"});
         encryptDecryptBox.addActionListener(_ -> {
@@ -53,19 +68,19 @@ public class GUI {
             System.out.println("Mode: " + enigmaMachine.getMode());
         });
 
-        rotor1Box = new JComboBox<>(new String[]{"I", "II", "III", "IV", "V"});
+        rotor1Box = new JComboBox<>(rotorPositions);
         rotor1Box.addActionListener(_ -> {
             enigmaMachine.getRotor1().setRotorPosition((String) Objects.requireNonNull(rotor1Box.getSelectedItem()));
             System.out.println("rotor1: " + enigmaMachine.getRotor1().getRotorPosition() + " rotor2: " + enigmaMachine.getRotor2().getRotorPosition() + " rotor3: " + enigmaMachine.getRotor3().getRotorPosition());
         });
 
-        rotor2Box = new JComboBox<>(new String[]{"I", "II", "III", "IV", "V"});
+        rotor2Box = new JComboBox<>(rotorPositions);
         rotor2Box.addActionListener(_ -> {
             enigmaMachine.getRotor2().setRotorPosition((String) Objects.requireNonNull(rotor2Box.getSelectedItem()));
             System.out.println("rotor1: " + enigmaMachine.getRotor1().getRotorPosition() + " rotor2: " + enigmaMachine.getRotor2().getRotorPosition() + " rotor3: " + enigmaMachine.getRotor3().getRotorPosition());
         });
 
-        rotor3Box = new JComboBox<>(new String[]{"I", "II", "III", "IV", "V"});
+        rotor3Box = new JComboBox<>(rotorPositions);
         rotor3Box.addActionListener(_ -> {
             enigmaMachine.getRotor3().setRotorPosition((String) Objects.requireNonNull(rotor3Box.getSelectedItem()));
             System.out.println("rotor1: " + enigmaMachine.getRotor1().getRotorPosition() + " rotor2: " + enigmaMachine.getRotor2().getRotorPosition() + " rotor3: " + enigmaMachine.getRotor3().getRotorPosition());
@@ -96,6 +111,24 @@ public class GUI {
             }
         );
 
+        submitEncryptDecrypt = new JButton("Submit");
+        submitEncryptDecrypt.addActionListener(_ -> {
+                String text = input.getText();
+                String outputString = "";
+
+                if (enigmaMachine.getMode().equals(EncryptDecrypt.ENCRYPT.toString())) {
+                    System.out.println("Input: " + text);
+                    outputString = enigmaMachine.encrypt(text.toUpperCase());
+                    output.setText("Encrypted Message: " + outputString);
+                    System.out.println("Output: " + outputString);
+                } else {
+                    System.out.println("Input: " + text);
+                    outputString = enigmaMachine.decrypt(text.toUpperCase());
+                    output.setText("Decrypted Message: " + outputString);
+                    System.out.println("Output: " + outputString);
+                }
+        });
+
         plugboardPanel = new JPanel();
         plugboardPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT / 4));
 
@@ -109,18 +142,7 @@ public class GUI {
 
         plugboardError = new JLabel("");
 
-        JButton mapButton = new JButton("Map");
-        mapButton.addActionListener(_ -> {
-            if (mapLetterFrom.getText().isEmpty() || mapLetterTo.getText().isEmpty()) {
-                plugboardError.setText("Error: Plugboard already contains one of the letters");
-                return;
-            }
-            enigmaMachine.mapPlugboard(mapLetterFrom.getText().toUpperCase().charAt(0), mapLetterTo.getText().toUpperCase().charAt(0));
-            System.out.println("Plugboard Active: " + enigmaMachine.isPlugboardActive());
-            plugboardError.setText("");
-            mapLetterFrom.setText("");
-            mapLetterTo.setText("");
-        });
+        JButton mapButton = getButton(enigmaMachine);
 
         JButton clearButton = new JButton("Clear Plugboard");
         clearButton.addActionListener(_ -> {
@@ -145,6 +167,7 @@ public class GUI {
 
         keyboardPanel.add(inputLabel);
         keyboardPanel.add(input);
+        keyboardPanel.add(submitEncryptDecrypt);
         outputPanel.add(output);
 
         panel.add(rotorPanel);
@@ -157,5 +180,22 @@ public class GUI {
         frame.add(panel);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+
+    private JButton getButton(EnigmaMachine enigmaMachine) {
+        JButton mapButton = new JButton("Map");
+        mapButton.addActionListener(_ -> {
+            if (mapLetterFrom.getText().isEmpty() || mapLetterTo.getText().isEmpty()) {
+                plugboardError.setText("Error: Plugboard already contains one of the letters");
+                return;
+            }
+            enigmaMachine.mapPlugboard(mapLetterFrom.getText().toUpperCase().charAt(0), mapLetterTo.getText().toUpperCase().charAt(0));
+            System.out.println("Plugboard Active: " + enigmaMachine.isPlugboardActive());
+            plugboardError.setText("");
+            mapLetterFrom.setText("");
+            mapLetterTo.setText("");
+        });
+        return mapButton;
     }
 }
