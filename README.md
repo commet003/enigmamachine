@@ -1,4 +1,4 @@
-# ENIGMA MACHINE README
+# ENIGMA MACHINE
 
 ## Description
 This project is a simple implementation of an Enigma machine.
