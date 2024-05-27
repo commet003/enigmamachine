@@ -18,146 +18,27 @@ public class Rotor{
     // the key is the input character and the value is the output character
     // the rotor position will determine the shift of the map
     private void setRotorMap(RotorPosition rotorPosition) {
+        int charOffset;
         switch (rotorPosition) {
             case I:
-                rotorMap.put('A', 'E');
-                rotorMap.put('B', 'K');
-                rotorMap.put('C', 'M');
-                rotorMap.put('D', 'F');
-                rotorMap.put('E', 'L');
-                rotorMap.put('F', 'G');
-                rotorMap.put('G', 'D');
-                rotorMap.put('H', 'Q');
-                rotorMap.put('I', 'V');
-                rotorMap.put('J', 'Z');
-                rotorMap.put('K', 'N');
-                rotorMap.put('L', 'T');
-                rotorMap.put('M', 'O');
-                rotorMap.put('N', 'W');
-                rotorMap.put('O', 'Y');
-                rotorMap.put('P', 'H');
-                rotorMap.put('Q', 'X');
-                rotorMap.put('R', 'U');
-                rotorMap.put('S', 'S');
-                rotorMap.put('T', 'P');
-                rotorMap.put('U', 'A');
-                rotorMap.put('V', 'I');
-                rotorMap.put('W', 'B');
-                rotorMap.put('X', 'R');
-                rotorMap.put('Y', 'C');
-                rotorMap.put('Z', 'J');
+                charOffset = 9;
+                generateRotorMap(charOffset);
                 break;
             case II:
-                rotorMap.put('A', 'A');
-                rotorMap.put('B', 'J');
-                rotorMap.put('C', 'D');
-                rotorMap.put('D', 'K');
-                rotorMap.put('E', 'S');
-                rotorMap.put('F', 'I');
-                rotorMap.put('G', 'R');
-                rotorMap.put('H', 'U');
-                rotorMap.put('I', 'X');
-                rotorMap.put('J', 'B');
-                rotorMap.put('K', 'L');
-                rotorMap.put('L', 'H');
-                rotorMap.put('M', 'W');
-                rotorMap.put('N', 'T');
-                rotorMap.put('O', 'M');
-                rotorMap.put('P', 'C');
-                rotorMap.put('Q', 'Q');
-                rotorMap.put('R', 'G');
-                rotorMap.put('S', 'Z');
-                rotorMap.put('T', 'N');
-                rotorMap.put('U', 'P');
-                rotorMap.put('V', 'Y');
-                rotorMap.put('W', 'F');
-                rotorMap.put('X', 'V');
-                rotorMap.put('Y', 'O');
-                rotorMap.put('Z', 'E');
+                charOffset = 15;
+                generateRotorMap(charOffset);
                 break;
             case III:
-                rotorMap.put('A', 'B');
-                rotorMap.put('B', 'D');
-                rotorMap.put('C', 'F');
-                rotorMap.put('D', 'H');
-                rotorMap.put('E', 'J');
-                rotorMap.put('F', 'L');
-                rotorMap.put('G', 'C');
-                rotorMap.put('H', 'P');
-                rotorMap.put('I', 'R');
-                rotorMap.put('J', 'T');
-                rotorMap.put('K', 'X');
-                rotorMap.put('L', 'V');
-                rotorMap.put('M', 'Z');
-                rotorMap.put('N', 'N');
-                rotorMap.put('O', 'Y');
-                rotorMap.put('P', 'E');
-                rotorMap.put('Q', 'I');
-                rotorMap.put('R', 'W');
-                rotorMap.put('S', 'G');
-                rotorMap.put('T', 'A');
-                rotorMap.put('U', 'K');
-                rotorMap.put('V', 'M');
-                rotorMap.put('W', 'U');
-                rotorMap.put('X', 'S');
-                rotorMap.put('Y', 'Q');
-                rotorMap.put('Z', 'O');
+                charOffset = 5;
+                generateRotorMap(charOffset);
                 break;
             case IV:
-                rotorMap.put('A', 'E');
-                rotorMap.put('B', 'S');
-                rotorMap.put('C', 'O');
-                rotorMap.put('D', 'V');
-                rotorMap.put('E', 'P');
-                rotorMap.put('F', 'Z');
-                rotorMap.put('G', 'J');
-                rotorMap.put('H', 'A');
-                rotorMap.put('I', 'Y');
-                rotorMap.put('J', 'Q');
-                rotorMap.put('K', 'U');
-                rotorMap.put('L', 'I');
-                rotorMap.put('M', 'R');
-                rotorMap.put('N', 'H');
-                rotorMap.put('O', 'X');
-                rotorMap.put('P', 'L');
-                rotorMap.put('Q', 'N');
-                rotorMap.put('R', 'F');
-                rotorMap.put('S', 'T');
-                rotorMap.put('T', 'G');
-                rotorMap.put('U', 'K');
-                rotorMap.put('V', 'D');
-                rotorMap.put('W', 'C');
-                rotorMap.put('X', 'M');
-                rotorMap.put('Y', 'W');
-                rotorMap.put('Z', 'B');
+                charOffset = 17;
+                generateRotorMap(charOffset);
                 break;
             case V:
-                rotorMap.put('A', 'V');
-                rotorMap.put('B', 'Z');
-                rotorMap.put('C', 'B');
-                rotorMap.put('D', 'R');
-                rotorMap.put('E', 'G');
-                rotorMap.put('F', 'I');
-                rotorMap.put('G', 'T');
-                rotorMap.put('H', 'Y');
-                rotorMap.put('I', 'U');
-                rotorMap.put('J', 'P');
-                rotorMap.put('K', 'S');
-                rotorMap.put('L', 'D');
-                rotorMap.put('M', 'N');
-                rotorMap.put('N', 'H');
-                rotorMap.put('O', 'L');
-                rotorMap.put('P', 'X');
-                rotorMap.put('Q', 'A');
-                rotorMap.put('R', 'W');
-                rotorMap.put('S', 'M');
-                rotorMap.put('T', 'J');
-                rotorMap.put('U', 'Q');
-                rotorMap.put('V', 'O');
-                rotorMap.put('W', 'F');
-                rotorMap.put('X', 'E');
-                rotorMap.put('Y', 'C');
-                rotorMap.put('Z', 'K');
+                charOffset = 7;
+                generateRotorMap(charOffset);
                 break;
         }
     }
@@ -204,5 +85,39 @@ public class Rotor{
 
     public RotorPosition getRotorPosition() {
         return rotorPosition;
+    }
+
+    private void generateRotorMap(int charOffset) {
+        rotorMap.put('A', shiftChar('A', charOffset));
+        rotorMap.put('B', shiftChar('B', charOffset));
+        rotorMap.put('C', shiftChar('C', charOffset));
+        rotorMap.put('D', shiftChar('D', charOffset));
+        rotorMap.put('E', shiftChar('E', charOffset));
+        rotorMap.put('F', shiftChar('F', charOffset));
+        rotorMap.put('G', shiftChar('G', charOffset));
+        rotorMap.put('H', shiftChar('H', charOffset));
+        rotorMap.put('I', shiftChar('I', charOffset));
+        rotorMap.put('J', shiftChar('J', charOffset));
+        rotorMap.put('K', shiftChar('K', charOffset));
+        rotorMap.put('L', shiftChar('L', charOffset));
+        rotorMap.put('M', shiftChar('M', charOffset));
+        rotorMap.put('N', shiftChar('N', charOffset));
+        rotorMap.put('O', shiftChar('O', charOffset));
+        rotorMap.put('P', shiftChar('P', charOffset));
+        rotorMap.put('Q', shiftChar('Q', charOffset));
+        rotorMap.put('R', shiftChar('R', charOffset));
+        rotorMap.put('S', shiftChar('S', charOffset));
+        rotorMap.put('T', shiftChar('T', charOffset));
+        rotorMap.put('U', shiftChar('U', charOffset));
+        rotorMap.put('V', shiftChar('V', charOffset));
+        rotorMap.put('W', shiftChar('W', charOffset));
+        rotorMap.put('X', shiftChar('X', charOffset));
+        rotorMap.put('Y', shiftChar('Y', charOffset));
+        rotorMap.put('Z', shiftChar('Z', charOffset));
+    }
+
+    private char shiftChar(char c, int shift) {
+        int alphabetLength = 26;
+        return (char) ((c - 'A' + shift) % alphabetLength + 'A');
     }
 }

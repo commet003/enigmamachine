@@ -1,11 +1,11 @@
 package com.corie_rhodes;
 
 public class EnigmaMachine {
-    private Rotor rotor1;
-    private Rotor rotor2;
-    private Rotor rotor3;
-    private Plugboard plugboard;
-    private Reflector reflector;
+    private final Rotor rotor1;
+    private final Rotor rotor2;
+    private final Rotor rotor3;
+    private final Plugboard plugboard;
+    private final Reflector reflector;
 
     private EncryptDecrypt mode;
     private boolean plugboardActive;
@@ -42,6 +42,7 @@ public class EnigmaMachine {
             tempChar = this.getPlugboard().encrypt(input.charAt(i));
             tempChar = this.getRotor1().encrypt(tempChar);
             tempChar = this.getRotor2().encrypt(tempChar);
+            tempChar = this.reflector.reflect(tempChar);
             tempChar = this.getRotor3().encrypt(tempChar);
             output.append(tempChar);
         }
@@ -55,11 +56,11 @@ public class EnigmaMachine {
         for (int i = 0; i < input.length(); i++) {
             if (inputErrorCheck(input, output, i)) continue;
             tempChar = this.getRotor3().decrypt(input.charAt(i));
+            tempChar = this.reflector.reflect(tempChar);
             tempChar = this.getRotor2().decrypt(tempChar);
             tempChar = this.getRotor1().decrypt(tempChar);
             output.append(this.getPlugboard().decrypt(tempChar));
         }
-
         return output.toString();
     }
 
@@ -97,10 +98,5 @@ public class EnigmaMachine {
 
     public boolean isPlugboardActive() {
         return plugboardActive;
-    }
-
-    public void clearPlugboard() {
-        plugboard.clear();
-        this.plugboardActive = false;
     }
 }

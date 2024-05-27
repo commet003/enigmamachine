@@ -10,144 +10,67 @@ import java.util.Objects;
 
 public class GUI {
 
-    private final JFrame frame;
-    private final JPanel panel;
-
-    private final JPanel rotorPanel;
-    private final JPanel keyboardPanel;
-    private final JPanel outputPanel;
-    private final JPanel plugboardPanel;
-
-    private final JComboBox<String> encryptDecryptBox;
-    private final JComboBox<String> rotor1Box;
-    private final JComboBox<String> rotor2Box;
-    private final JComboBox<String> rotor3Box;
-
-    private final JLabel inputLabel;
     private final JTextField input;
-    private final JButton submitEncryptDecrypt;
-    private final JLabel mapLetterFromLabel;
     private final JTextField mapLetterFrom;
-    private final JLabel mapLetterToLabel;
     private final JTextField mapLetterTo;
     private final JLabel output;
     private final JLabel plugboardError;
 
-    private final int WIDTH = 800;
-    private final int HEIGHT = 600;
-
-    private final String[] rotorPositions = {"I", "II", "III", "IV", "V"};
-
-
-
     public GUI (EnigmaMachine enigmaMachine) {
-        frame = new JFrame("Enigma Machine!");
+        JFrame frame = new JFrame("Enigma Machine!");
 
-        panel = new JPanel();
+        JPanel panel = new JPanel();
+        int WIDTH = 800;
+        int HEIGHT = 600;
         panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
-        rotorPanel = new JPanel();
+        JPanel rotorPanel = new JPanel();
         rotorPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT / 4));
 
-        outputPanel = new JPanel();
+        JPanel outputPanel = new JPanel();
         outputPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT / 4));
-        output = new JLabel("Encrypted Message: ");
-        output.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                StringSelection stringSelection = new StringSelection(output.getText());
-                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                clipboard.setContents(stringSelection, null);
-                System.out.println(output.getText() + " copied to clipboard");
-            }
-        });
+        output = createOutputLabel();
 
-        encryptDecryptBox = new JComboBox<>(new String[]{"Encrypt", "Decrypt"});
-        encryptDecryptBox.addActionListener(_ -> {
-            enigmaMachine.setMode((String) Objects.requireNonNull(encryptDecryptBox.getSelectedItem()));
-            System.out.println("Mode: " + enigmaMachine.getMode());
-        });
 
-        rotor1Box = new JComboBox<>(rotorPositions);
-        rotor1Box.addActionListener(_ -> {
-            enigmaMachine.getRotor1().setRotorPosition((String) Objects.requireNonNull(rotor1Box.getSelectedItem()));
-            System.out.println("rotor1: " + enigmaMachine.getRotor1().getRotorPosition() + " rotor2: " + enigmaMachine.getRotor2().getRotorPosition() + " rotor3: " + enigmaMachine.getRotor3().getRotorPosition());
-        });
+        String[] modes = {"Encrypt", "Decrypt"};
+        JComboBox<String> encryptDecryptBox = createModeBox(modes, enigmaMachine);
 
-        rotor2Box = new JComboBox<>(rotorPositions);
-        rotor2Box.addActionListener(_ -> {
-            enigmaMachine.getRotor2().setRotorPosition((String) Objects.requireNonNull(rotor2Box.getSelectedItem()));
-            System.out.println("rotor1: " + enigmaMachine.getRotor1().getRotorPosition() + " rotor2: " + enigmaMachine.getRotor2().getRotorPosition() + " rotor3: " + enigmaMachine.getRotor3().getRotorPosition());
-        });
 
-        rotor3Box = new JComboBox<>(rotorPositions);
-        rotor3Box.addActionListener(_ -> {
-            enigmaMachine.getRotor3().setRotorPosition((String) Objects.requireNonNull(rotor3Box.getSelectedItem()));
-            System.out.println("rotor1: " + enigmaMachine.getRotor1().getRotorPosition() + " rotor2: " + enigmaMachine.getRotor2().getRotorPosition() + " rotor3: " + enigmaMachine.getRotor3().getRotorPosition());
-        });
+        String[] rotorPositions = {"I", "II", "III", "IV", "V"};
+        JComboBox<String> rotor1Box = createRotorBox(enigmaMachine.getRotor1(), rotorPositions);
+        JComboBox<String> rotor2Box = createRotorBox(enigmaMachine.getRotor2(), rotorPositions);
+        JComboBox<String> rotor3Box = createRotorBox(enigmaMachine.getRotor3(), rotorPositions);
 
-        keyboardPanel = new JPanel();
+
+        JPanel keyboardPanel = new JPanel();
         keyboardPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT / 4));
 
-        inputLabel = new JLabel("Enter Message:");
+        JLabel inputLabel = new JLabel("Enter Message:");
 
         input = new JTextField();
         input.setPreferredSize(new Dimension(200, 50));
-        input.addActionListener(_ -> {
-                String text = input.getText();
-                String outputString = "";
+        input.addActionListener(_ -> encryptDecryptSubmit(input.getText(), enigmaMachine));
 
-                if (enigmaMachine.getMode().equals(EncryptDecrypt.ENCRYPT.toString())) {
-                    System.out.println("Input: " + text);
-                    outputString = enigmaMachine.encrypt(text.toUpperCase());
-                    output.setText("Encrypted Message: " + outputString);
-                    System.out.println("Output: " + outputString);
-                } else {
-                    System.out.println("Input: " + text);
-                    outputString = enigmaMachine.decrypt(text.toUpperCase());
-                    output.setText("Decrypted Message: " + outputString);
-                    System.out.println("Output: " + outputString);
-                }
-            }
-        );
+        JButton submitEncryptDecrypt = new JButton("Submit");
+        submitEncryptDecrypt.addActionListener(_ -> encryptDecryptSubmit(input.getText(), enigmaMachine));
 
-        submitEncryptDecrypt = new JButton("Submit");
-        submitEncryptDecrypt.addActionListener(_ -> {
-                String text = input.getText();
-                String outputString = "";
-
-                if (enigmaMachine.getMode().equals(EncryptDecrypt.ENCRYPT.toString())) {
-                    System.out.println("Input: " + text);
-                    outputString = enigmaMachine.encrypt(text.toUpperCase());
-                    output.setText("Encrypted Message: " + outputString);
-                    System.out.println("Output: " + outputString);
-                } else {
-                    System.out.println("Input: " + text);
-                    outputString = enigmaMachine.decrypt(text.toUpperCase());
-                    output.setText("Decrypted Message: " + outputString);
-                    System.out.println("Output: " + outputString);
-                }
-        });
-
-        plugboardPanel = new JPanel();
+        JPanel plugboardPanel = new JPanel();
         plugboardPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT / 4));
 
-        mapLetterFromLabel = new JLabel("Map Letter From:");
+        JLabel mapLetterFromLabel = new JLabel("Map Letter From:");
         mapLetterFrom = new JTextField();
         mapLetterFrom.setPreferredSize(new Dimension(50, 50));
 
-        mapLetterToLabel = new JLabel("Map Letter To:");
+        JLabel mapLetterToLabel = new JLabel("Map Letter To:");
         mapLetterTo = new JTextField();
         mapLetterTo.setPreferredSize(new Dimension(50, 50));
 
         plugboardError = new JLabel("");
 
-        JButton mapButton = getButton(enigmaMachine);
+        JButton mapButton = getPlugboardButton(enigmaMachine);
 
         JButton clearButton = new JButton("Clear Plugboard");
-        clearButton.addActionListener(_ -> {
-            enigmaMachine.getPlugboard().clear();
-        });
+        clearButton.addActionListener(_ -> enigmaMachine.getPlugboard().clear());
 
         rotorPanel.add(new JLabel("Encrypt/Decrypt:"));
         rotorPanel.add(encryptDecryptBox);
@@ -183,7 +106,27 @@ public class GUI {
     }
 
 
-    private JButton getButton(EnigmaMachine enigmaMachine) {
+    private JComboBox<String> createModeBox(String[] modes, EnigmaMachine enigmaMachine) {
+        JComboBox<String> encryptDecryptBox = new JComboBox<>(modes);
+        encryptDecryptBox.addActionListener(_ -> enigmaMachine.setMode((String) Objects.requireNonNull(encryptDecryptBox.getSelectedItem())));
+        return encryptDecryptBox;
+    }
+
+    private JComboBox<String> createRotorBox(Rotor rotor, String[] rotorPositions) {
+        JComboBox<String> rotorBox = new JComboBox<>(rotorPositions);
+        rotorBox.addActionListener(_ -> setRotorPosition(rotor, (String) Objects.requireNonNull(rotorBox.getSelectedItem())));
+        return rotorBox;
+    }
+
+    private void printRotorPosition(EnigmaMachine enigmaMachine) {
+        System.out.println("Rotor 1: " + enigmaMachine.getRotor1().getRotorPosition() + " Rotor 2: " + enigmaMachine.getRotor2().getRotorPosition() + " Rotor 3: " + enigmaMachine.getRotor3().getRotorPosition());
+    }
+
+    private void setRotorPosition(Rotor rotor, String position) {
+        rotor.setRotorPosition(position);
+    }
+
+    private JButton getPlugboardButton(EnigmaMachine enigmaMachine) {
         JButton mapButton = new JButton("Map");
         mapButton.addActionListener(_ -> {
             if (mapLetterFrom.getText().isEmpty() || mapLetterTo.getText().isEmpty()) {
@@ -191,11 +134,61 @@ public class GUI {
                 return;
             }
             enigmaMachine.mapPlugboard(mapLetterFrom.getText().toUpperCase().charAt(0), mapLetterTo.getText().toUpperCase().charAt(0));
-            System.out.println("Plugboard Active: " + enigmaMachine.isPlugboardActive());
             plugboardError.setText("");
             mapLetterFrom.setText("");
             mapLetterTo.setText("");
         });
         return mapButton;
+    }
+
+    private void encryptDecryptSubmit(String text, EnigmaMachine enigmaMachine) {
+        String outputString;
+
+        if (enigmaMachine.getMode().equals(EncryptDecrypt.ENCRYPT.toString())) {
+            //System.out.println("Input: " + text);
+            outputString = enigmaMachine.encrypt(text.toUpperCase());
+            output.setText("Encrypted Message: " + outputString);
+            //System.out.println("Output: " + outputString);
+        } else {
+            //System.out.println("Input: " + text);
+            outputString = enigmaMachine.decrypt(text.toUpperCase());
+            output.setText("Decrypted Message: " + outputString);
+            //System.out.println("Output: " + outputString);
+        }
+        printRotorPosition(enigmaMachine);
+        removeOutputBorderColor();
+    }
+
+    private JLabel createOutputLabel() {
+        JLabel output = new JLabel("Output: ");
+        output.addMouseListener(new MouseAdapter() {
+
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                StringSelection stringSelection = new StringSelection(formatClipboardText(output.getText()));
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(stringSelection, null);
+                changeOutputBorderColor();
+            }
+
+        });
+
+        return output;
+    }
+
+    private void changeOutputBorderColor() {
+        output.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+    }
+
+    private void removeOutputBorderColor() {
+        output.setBorder(null);
+    }
+
+    private static String formatClipboardText(String text) {
+        String[] parts = text.split(":");
+        if (parts.length == 1) {
+            return text; // No colon found, return original string
+        }
+        return parts[1].strip();
     }
 }
