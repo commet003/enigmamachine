@@ -6,10 +6,12 @@ import java.util.Map;
 public class Rotor{
     private RotorPosition rotorPosition;
     private final Map<Character, Character> rotorMap;
+    private final Map<Character, Character> decryptRotorMap;
 
     public Rotor() {
         rotorPosition = RotorPosition.I;
         rotorMap = new HashMap<>();
+        decryptRotorMap = new HashMap<>();
         this.setRotorMap(rotorPosition);
     }
 
@@ -23,22 +25,27 @@ public class Rotor{
             case I:
                 charOffset = 9;
                 generateRotorMap(charOffset);
+                generateDecryptMap();
                 break;
             case II:
                 charOffset = 15;
                 generateRotorMap(charOffset);
+                generateDecryptMap();
                 break;
             case III:
                 charOffset = 5;
                 generateRotorMap(charOffset);
+                generateDecryptMap();
                 break;
             case IV:
                 charOffset = 17;
                 generateRotorMap(charOffset);
+                generateDecryptMap();
                 break;
             case V:
                 charOffset = 7;
                 generateRotorMap(charOffset);
+                generateDecryptMap();
                 break;
         }
     }
@@ -47,13 +54,8 @@ public class Rotor{
         return this.rotorMap.get(c);
     }
 
-    public char decrypt(char input) {
-        for (Map.Entry<Character, Character> entry : rotorMap.entrySet()) {
-            if (entry.getValue().equals(input)) {
-                return entry.getKey();
-            }
-        }
-        return ' ';
+    public char decrypt(char c) {
+        return this.decryptRotorMap.get(c);
     }
 
 
@@ -114,6 +116,12 @@ public class Rotor{
         rotorMap.put('X', shiftChar('X', charOffset));
         rotorMap.put('Y', shiftChar('Y', charOffset));
         rotorMap.put('Z', shiftChar('Z', charOffset));
+    }
+
+    private void generateDecryptMap() {
+        for (Map.Entry<Character, Character> entry : rotorMap.entrySet()) {
+            decryptRotorMap.put(entry.getValue(), entry.getKey());
+        }
     }
 
     private char shiftChar(char c, int shift) {
