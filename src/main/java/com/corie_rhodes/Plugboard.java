@@ -20,20 +20,23 @@ public class Plugboard {
         this.print();
     }
 
-    public char encrypt(char c) {
-        if (!plugboardMap.containsKey(c)) {
-            return c;
-        }
-        return this.plugboardMap.get(c);
+    public String encrypt(String message) {
+        return transform(message);
     }
 
-    public char decrypt(char c) {
-        for (Map.Entry<Character, Character> entry : plugboardMap.entrySet()) {
-            if (entry.getValue().equals(c)) {
-                return entry.getKey();
+    public String decrypt(String secret) {
+        return transform(secret);
+    }
+
+    private String transform(String original) {
+        char[] msg = original.toCharArray();
+        for (int i = 0; i <msg.length; i++) {
+            if (Character.isUpperCase(msg[i])) {
+                if (!plugboardMap.isEmpty())
+                    msg[i] = (plugboardMap.get(msg[i]) != null) ? plugboardMap.get(msg[i]) : msg[i];
             }
         }
-        return c;
+        return new String(msg);
     }
 
     public void print() {

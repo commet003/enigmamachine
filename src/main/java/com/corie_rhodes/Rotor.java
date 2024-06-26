@@ -1,17 +1,16 @@
 package com.corie_rhodes;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Rotor{
     private RotorPosition rotorPosition;
-    private final Map<Character, Character> rotorMap;
-    private final Map<Character, Character> decryptRotorMap;
+    protected char[] encoder = new char[26];
+    protected char[] decoder = new char[26];
+    List<Integer> list = new ArrayList<>();
+
 
     public Rotor() {
         rotorPosition = RotorPosition.I;
-        rotorMap = new HashMap<>();
-        decryptRotorMap = new HashMap<>();
         this.setRotorMap(rotorPosition);
     }
 
@@ -24,41 +23,45 @@ public class Rotor{
         switch (rotorPosition) {
             case I:
                 charOffset = 9;
-                generateRotorMap(charOffset);
-                generateDecryptMap();
+                generateEncoderDecoder(charOffset);
                 break;
             case II:
                 charOffset = 15;
-                generateRotorMap(charOffset);
-                generateDecryptMap();
+                generateEncoderDecoder(charOffset);
                 break;
             case III:
                 charOffset = 5;
-                generateRotorMap(charOffset);
-                generateDecryptMap();
+                generateEncoderDecoder(charOffset);
                 break;
             case IV:
                 charOffset = 17;
-                generateRotorMap(charOffset);
-                generateDecryptMap();
+                generateEncoderDecoder(charOffset);
                 break;
             case V:
                 charOffset = 7;
-                generateRotorMap(charOffset);
-                generateDecryptMap();
+                generateEncoderDecoder(charOffset);
                 break;
         }
     }
 
-    public char encrypt(char c) {
-        return this.rotorMap.get(c);
+    public String encrypt(String message) {
+        return transform(message, encoder);
     }
 
-    public char decrypt(char c) {
-        return this.decryptRotorMap.get(c);
+    public String decrypt(String secret) {
+        return transform(secret, decoder);
     }
 
-
+    private String transform(String original, char[] code) {
+        char[] msg = original.toCharArray();
+        for (int i = 0; i <msg.length; i++) {
+            if (Character.isUpperCase(msg[i])) {
+                int j = msg[i] - 'A';
+                msg[i] = code[j];
+            }
+        }
+        return new String(msg);
+    }
 
     public void setRotorPosition(String newRotorPosition) {
         switch (newRotorPosition) {
@@ -89,43 +92,10 @@ public class Rotor{
         return rotorPosition;
     }
 
-    private void generateRotorMap(int charOffset) {
-        rotorMap.put('A', shiftChar('A', charOffset));
-        rotorMap.put('B', shiftChar('B', charOffset));
-        rotorMap.put('C', shiftChar('C', charOffset));
-        rotorMap.put('D', shiftChar('D', charOffset));
-        rotorMap.put('E', shiftChar('E', charOffset));
-        rotorMap.put('F', shiftChar('F', charOffset));
-        rotorMap.put('G', shiftChar('G', charOffset));
-        rotorMap.put('H', shiftChar('H', charOffset));
-        rotorMap.put('I', shiftChar('I', charOffset));
-        rotorMap.put('J', shiftChar('J', charOffset));
-        rotorMap.put('K', shiftChar('K', charOffset));
-        rotorMap.put('L', shiftChar('L', charOffset));
-        rotorMap.put('M', shiftChar('M', charOffset));
-        rotorMap.put('N', shiftChar('N', charOffset));
-        rotorMap.put('O', shiftChar('O', charOffset));
-        rotorMap.put('P', shiftChar('P', charOffset));
-        rotorMap.put('Q', shiftChar('Q', charOffset));
-        rotorMap.put('R', shiftChar('R', charOffset));
-        rotorMap.put('S', shiftChar('S', charOffset));
-        rotorMap.put('T', shiftChar('T', charOffset));
-        rotorMap.put('U', shiftChar('U', charOffset));
-        rotorMap.put('V', shiftChar('V', charOffset));
-        rotorMap.put('W', shiftChar('W', charOffset));
-        rotorMap.put('X', shiftChar('X', charOffset));
-        rotorMap.put('Y', shiftChar('Y', charOffset));
-        rotorMap.put('Z', shiftChar('Z', charOffset));
-    }
-
-    private void generateDecryptMap() {
-        for (Map.Entry<Character, Character> entry : rotorMap.entrySet()) {
-            decryptRotorMap.put(entry.getValue(), entry.getKey());
+    private void generateEncoderDecoder(int charOffset) {
+        for (int i = 0; i < 26; i++) {
+            encoder[i] = (char) ('A' + (i + charOffset) % 26);
+            decoder[i] = (char) ('A' + (i - charOffset + 26) % 26);
         }
-    }
-
-    private char shiftChar(char c, int shift) {
-        int alphabetLength = 26;
-        return (char) ((c - 'A' + shift) % alphabetLength + 'A');
     }
 }

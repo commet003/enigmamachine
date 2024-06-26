@@ -5,15 +5,19 @@ import java.util.Map;
 
 public class Reflector {
 
-    private Map<Character, Character> reflectorMap;
+    private final Map<Character, Character> reflectorMap;
 
     public Reflector() {
         reflectorMap = new HashMap<>();
         generateMap();
     }
 
-    public char reflect(char c) {
-        return reflectorMap.get(c);
+    public String reflect(String original) {
+        char[] msg = original.toCharArray();
+        for (int i = 0; i < msg.length; i++) {
+            msg[i] = reflectorMap.get(msg[i]);
+        }
+        return new String(msg);
     }
 
     private void generateMap() {

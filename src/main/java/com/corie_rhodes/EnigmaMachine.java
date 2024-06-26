@@ -35,41 +35,35 @@ public class EnigmaMachine {
     }
 
     public String encrypt(String input) {
-        StringBuilder output = new StringBuilder();
-        char tempChar;
+        String tempMessege = "";
         for (int i = 0; i < input.length(); i++) {
-            if (inputErrorCheck(input, output, i)) continue;
-            tempChar = this.getPlugboard().encrypt(input.charAt(i));
-            tempChar = this.getRotor1().encrypt(tempChar);
-            tempChar = this.getRotor2().encrypt(tempChar);
-            tempChar = this.reflector.reflect(tempChar);
-            tempChar = this.getRotor3().encrypt(tempChar);
-            output.append(tempChar);
+            if (inputErrorCheck(input, i)) continue;
+            tempMessege = this.getPlugboard().encrypt(input);
+            tempMessege = this.getRotor1().encrypt(tempMessege);
+            tempMessege = this.getRotor2().encrypt(tempMessege);
+            tempMessege = this.reflector.reflect(tempMessege);
+            tempMessege = this.getRotor3().encrypt(tempMessege);
         }
-
-        return output.toString();
+        return tempMessege;
     }
 
     public String decrypt(String input) {
-        StringBuilder output = new StringBuilder();
-        char tempChar;
+        String tempString = "";
         for (int i = 0; i < input.length(); i++) {
-            if (inputErrorCheck(input, output, i)) continue;
-            tempChar = this.getRotor3().decrypt(input.charAt(i));
-            tempChar = this.reflector.reflect(tempChar);
-            tempChar = this.getRotor2().decrypt(tempChar);
-            tempChar = this.getRotor1().decrypt(tempChar);
-            output.append(this.getPlugboard().decrypt(tempChar));
+            if (inputErrorCheck(input, i)) continue;
+            tempString = this.getRotor3().decrypt(input);
+            tempString = this.reflector.reflect(tempString);
+            tempString = this.getRotor2().decrypt(tempString);
+            tempString = this.getRotor1().decrypt(tempString);
+            tempString = this.getPlugboard().decrypt(tempString);
         }
-        return output.toString();
+        return tempString;
     }
 
-    private boolean inputErrorCheck(String input, StringBuilder output, int i) {
+    private boolean inputErrorCheck(String input, int i) {
         if (input.charAt(i) == ' ') {
-            output.append(' ');
             return true;
         } else if (input.charAt(i) == '\n') {
-            output.append('\n');
             return true;
         } else return !Character.isLetter(input.charAt(i));
     }
