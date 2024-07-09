@@ -14,10 +14,6 @@ public class Rotor{
         this.setRotorMap(rotorPosition);
     }
 
-    // Internal wiring map for rotor
-    // use a map to represent the wiring of the rotor
-    // the key is the input character and the value is the output character
-    // the rotor position will determine the shift of the map
     private void setRotorMap(RotorPosition rotorPosition) {
         int charOffset;
         switch (rotorPosition) {

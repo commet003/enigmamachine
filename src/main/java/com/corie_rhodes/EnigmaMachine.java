@@ -38,11 +38,11 @@ public class EnigmaMachine {
         String tempMessege = "";
         for (int i = 0; i < input.length(); i++) {
             if (inputErrorCheck(input, i)) continue;
-            tempMessege = this.getPlugboard().encrypt(input);
-            tempMessege = this.getRotor1().encrypt(tempMessege);
-            tempMessege = this.getRotor2().encrypt(tempMessege);
-            tempMessege = this.reflector.reflect(tempMessege);
-            tempMessege = this.getRotor3().encrypt(tempMessege);
+            tempMessege = getPlugboard().encrypt(input);
+            tempMessege = getRotor1().encrypt(tempMessege);
+            tempMessege = getRotor2().encrypt(tempMessege);
+            tempMessege = reflector.reflect(tempMessege);
+            tempMessege = getRotor3().encrypt(tempMessege);
         }
         return tempMessege;
     }
@@ -51,11 +51,11 @@ public class EnigmaMachine {
         String tempString = "";
         for (int i = 0; i < input.length(); i++) {
             if (inputErrorCheck(input, i)) continue;
-            tempString = this.getRotor3().decrypt(input);
-            tempString = this.reflector.reflect(tempString);
-            tempString = this.getRotor2().decrypt(tempString);
-            tempString = this.getRotor1().decrypt(tempString);
-            tempString = this.getPlugboard().decrypt(tempString);
+            tempString = getRotor3().decrypt(input);
+            tempString = reflector.reflect(tempString);
+            tempString = getRotor2().decrypt(tempString);
+            tempString = getRotor1().decrypt(tempString);
+            tempString = getPlugboard().decrypt(tempString);
         }
         return tempString;
     }
@@ -82,8 +82,8 @@ public class EnigmaMachine {
 
 
     public void mapPlugboard(char c1, char c2) {
-        this.getPlugboard().addPlug(c1, c2);
-        this.plugboardActive = true;
+        getPlugboard().addPlug(c1, c2);
+        plugboardActive = true;
     }
 
     public Plugboard getPlugboard() {
